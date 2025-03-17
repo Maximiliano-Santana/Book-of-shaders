@@ -3,10 +3,12 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-import gui from 'lil-gui';
+import gui, { GUI } from 'lil-gui';
 
-import helloWorldVS from '/resources/shaders/helloWorld/vertex.glsl';
-import helloWorldFS from '/resources/shaders/helloWorld/fragment.glsl';
+import { shaders } from './resources/shaders/shaders';
+
+//Shader to use
+const { fs, vs } = shaders.helloWorld;
 
 //Sizes 
 const sizes = {
@@ -47,14 +49,14 @@ const orbitControls = new OrbitControls(camera, canvas);
 
 //Objects
 const planeGeometry = new THREE.PlaneGeometry(1, 1, 200, 200);
-const planeMaterial = new THREE.ShaderMaterial({
-  vertexShader: helloWorldVS,
-  fragmentShader: helloWorldFS,
+const planeMaterial = new THREE.RawShaderMaterial({
+  vertexShader: vs,
+  fragmentShader: fs,
   uniforms: {
     uTime : { value: 0 }
   }
 });
-const planeMesh = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial());
+const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 scene.add(planeMesh);
 //Tick 
 const clock = new THREE.Clock();
